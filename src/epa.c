@@ -532,13 +532,13 @@ void esEdsGetIdle(
     }
 }
 
-void esEdsGetCurrent(
-    struct esEpa **     epa) {
+struct esEpa * esEdsGetCurrent(
+    void) {
 
     /* NOTE: Since pointer loading is atomic operation there is no need to lock
      *       interrupts here.
      */
-    *epa = schedGetCurrentI();
+    return (schedGetCurrentI());
 }
 
 esError esEpaResourceAdd(

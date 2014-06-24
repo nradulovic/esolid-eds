@@ -122,8 +122,8 @@ void esEdsSetIdle(
 void esEdsGetIdle(
     void            (** idle)(void));
 
-void esEdsGetCurrent(
-    struct esEpa **     epa);
+struct esEpa * esEdsGetCurrent(
+    void);
 
 /**@} *//*----------------------------------------------------------------*//**
  * @name        EPA Resource management
