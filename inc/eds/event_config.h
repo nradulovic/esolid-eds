@@ -106,8 +106,8 @@
 #if !defined(CONFIG_GET_CURRENT_EPA)
 # define CONFIG_GET_CURRENT_EPA(epa)                                            \
     do {                                                                        \
-        esError esEdsGetCurrent(struct esEpa **);                               \
-        (void)esEdsGetCurrent(epa);                                             \
+        struct esEpa * esEdsGetCurrent(void);                                   \
+        *epa = esEdsGetCurrent();                                               \
     } while (0)
 #endif
 
