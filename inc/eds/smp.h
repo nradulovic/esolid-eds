@@ -48,7 +48,7 @@
     ES_STATE_ID(state),
 
 #define ES_EXPAND_STATE_SUPER(state, super)                                     \
-    { ES_STATE_ID(super), (esState)&state },
+    { ES_STATE_ID(super), &state },
 
 #define ES_STATE_ID_INIT(table)                                                 \
     table##_FIRST_STATE,                                                        \
