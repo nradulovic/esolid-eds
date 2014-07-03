@@ -68,7 +68,7 @@ deleted.
  * @details     An event must have ID which is below this limit.
  * @api
  */
-#define ES_EVENT_REF_LIMIT              (ES_EVENT_CONST_Msk - (uint16_t)1u)
+#define ES_EVENT_REF_LIMIT              (ES_EVENT_RESERVED_Msk)
 
 /**@brief       Event object API signature
  */
@@ -286,7 +286,7 @@ static PORT_C_INLINE void esEventReferenceDown_(
 static PORT_C_INLINE uint_fast16_t esEventRefGet_(
     const struct esEvent * event) {
 
-    return (event->attrib & (uint16_t)~ES_EVENT_RESERVED_Msk);
+    return (event->attrib & (uint16_t)~(ES_EVENT_RESERVED_Msk));
 }
 
 /** @} *//*-----------------------------------------------  C++ extern end  --*/
