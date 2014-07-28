@@ -138,6 +138,9 @@ esError esEpaResourceRemove(
 
 void esEpaGetMem(esMem ** mem);
 
+void * esEpaGetWorkspace(
+    const struct esEpa *        epa);
+
 /**@} *//*----------------------------------------------------------------*//**
  * @name        EPA management
  * @{ *//*--------------------------------------------------------------------*/

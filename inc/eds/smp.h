@@ -150,6 +150,8 @@ esError esSmDispatch(
     struct esEvent *    event,
     esAction *          action);
 
+void * esSmGetWorkspace(const struct esSm * sm);
+
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
 }

@@ -541,6 +541,12 @@ struct esEpa * esEdsGetCurrent(
     return (schedGetCurrentI());
 }
 
+void * esEpaGetWorkspace(
+    const struct esEpa *        epa)
+{
+    return (esSmGetWorkspace(epa->sm));
+}
+
 esError esEpaResourceAdd(
     size_t              size,
     void **             resource) {
