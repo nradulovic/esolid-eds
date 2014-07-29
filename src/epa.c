@@ -66,7 +66,7 @@ struct epaKernel {
     enum epaKernelState state;
 };
 
-struct epaEventQ {
+struct esEventQ {
     struct esQp         qp;
     uint32_t            max;
 };
@@ -79,7 +79,7 @@ struct esEpa {
     struct esMem *      mem;
     struct esSm *       sm;
     struct epaSchedElem schedElem;
-    struct epaEventQ    eventQ;
+    struct esEventQ    eventQ;
     const PORT_C_ROM char * name;
     struct esSls        resources;
 #if (CONFIG_API_VALIDATION) || defined(__DOXYGEN__)
@@ -92,32 +92,32 @@ struct esEpa {
 /*--  Event Queue  -----------------------------------------------------------*/
 
 static PORT_C_INLINE void eventQInit(
-    struct epaEventQ *  eventQ,
+    struct esEventQ *  eventQ,
     void **             buff,
     size_t              size);
 
 static PORT_C_INLINE void eventQTerm(
-    struct epaEventQ *  eventQ);
+    struct esEventQ *  eventQ);
 
 static PORT_C_INLINE void eventQPutItemI(
-    struct epaEventQ *  eventQ,
+    struct esEventQ *  eventQ,
     struct esEvent *    event);
 
 static PORT_C_INLINE void eventQPutAheadItemI(
-    struct epaEventQ *  eventQ,
+    struct esEventQ *  eventQ,
     struct esEvent *    event);
 
 static PORT_C_INLINE struct esEvent * eventQGetItemI(
-    struct epaEventQ *  eventQ);
+    struct esEventQ *  eventQ);
 
 static PORT_C_INLINE bool eventQIsEmpty(
-    const struct epaEventQ * eventQ);
+    const struct esEventQ * eventQ);
 
 static PORT_C_INLINE bool eventQIsFull(
-    const struct epaEventQ * eventQ);
+    const struct esEventQ * eventQ);
 
 static PORT_C_INLINE void ** eventQBuff(
-    const struct epaEventQ * eventQ);
+    const struct esEventQ * eventQ);
 
 /*--  Scheduler  -------------------------------------------------------------*/
 
@@ -190,7 +190,7 @@ static struct epaKernel GlobalEdsKernel;
 /*--  Event Queue  -----------------------------------------------------------*/
 
 static PORT_C_INLINE void eventQInit(
-    struct epaEventQ *  eventQ,
+    struct esEventQ *  eventQ,
     void **             buff,
     size_t              size) {
 
@@ -199,13 +199,13 @@ static PORT_C_INLINE void eventQInit(
 }
 
 static PORT_C_INLINE void eventQTerm(
-    struct epaEventQ *  eventQ) {
+    struct esEventQ *  eventQ) {
 
     esQpTerm(&eventQ->qp);
 }
 
 static PORT_C_INLINE void eventQPutItemI(
-    struct epaEventQ *  eventQ,
+    struct esEventQ *  eventQ,
     struct esEvent * event) {
 
     uint32_t            occupied;
@@ -219,7 +219,7 @@ static PORT_C_INLINE void eventQPutItemI(
 }
 
 static PORT_C_INLINE void eventQPutAheadItemI(
-    struct epaEventQ *  eventQ,
+    struct esEventQ *  eventQ,
     struct esEvent *    event) {
 
     uint32_t            occupied;
@@ -233,25 +233,25 @@ static PORT_C_INLINE void eventQPutAheadItemI(
 }
 
 static PORT_C_INLINE struct esEvent * eventQGetItemI(
-    struct epaEventQ *  eventQ) {
+    struct esEventQ *  eventQ) {
 
     return ((struct esEvent *)esQpGetItem(&eventQ->qp));
 }
 
 static PORT_C_INLINE bool eventQIsEmpty(
-    const struct epaEventQ * eventQ) {
+    const struct esEventQ * eventQ) {
 
     return (esQpIsEmpty(&eventQ->qp));
 }
 
 static PORT_C_INLINE bool eventQIsFull(
-    const struct epaEventQ * eventQ) {
+    const struct esEventQ * eventQ) {
 
     return (esQpIsFull(&eventQ->qp));
 }
 
 static PORT_C_INLINE void ** eventQBuff(
-    const struct epaEventQ * eventQ) {
+    const struct esEventQ * eventQ) {
 
     return (esQpBuff(&eventQ->qp));
 }
