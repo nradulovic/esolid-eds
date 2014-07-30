@@ -289,10 +289,7 @@ void esEventUnlockI(
     struct esEvent *       event) {
 
     ES_REQUIRE(ES_API_POINTER, event != NULL);
-    //ES_REQUIRE(ES_API_OBJECT,  event->signature == ES_EVENT_SIGNATURE);
-    if (event->signature != ES_EVENT_SIGNATURE) {
-        volatile esAtomic sign = event->signature;
-    }
+    ES_REQUIRE(ES_API_OBJECT,  event->signature == ES_EVENT_SIGNATURE);
 
     event->attrib &= (uint16_t)~ES_EVENT_RESERVED_Msk;
 
