@@ -53,7 +53,7 @@
  *              defining a static event in ROM address space.
  * @api
  */
-#define ES_EVENT_RESERVED_Msk           ((uint16_t)(0x01u << 15))
+#define ES_EVENT_RESERVED_Msk           (((uint16_t)0x01u << 15))
 
 /**@brief       Bit mask which defines a constant event
  * @details     When the bits defined in this bit mask are set the given event
@@ -236,7 +236,7 @@ void esEventLock(
  *              Pokazivac na dogadjaj koji se oslobadja.
  * @api
  */
-void esEventUnlock(
+void esEventUnlockI(
     esEvent *           event);
 
 /**@} *//*----------------------------------------------------------------*//**
@@ -287,6 +287,12 @@ static PORT_C_INLINE uint_fast16_t esEventRefGet_(
     const struct esEvent * event) {
 
     return (event->attrib & (uint16_t)~(ES_EVENT_RESERVED_Msk));
+}
+
+static PORT_C_INLINE uint_fast16_t esEventAttrib_(
+    const struct esEvent * event)
+{
+    return (event->attrib);
 }
 
 /** @} *//*-----------------------------------------------  C++ extern end  --*/
