@@ -748,8 +748,10 @@ void esQueueInit(struct esEventQ * queue, void * buff, size_t size)
 esError esQueuePut(struct esEventQ * queue, esEvent *  event)
 {
     esIntrCtx           intrCtx;
+    esError             error;
 
     ES_CRITICAL_LOCK_ENTER(&intrCtx);
+    error = ES_ERROR_NO_REFERENCE;
 
     if (esEventRefGet_(event) < ES_EVENT_REF_LIMIT) {
         esEventRefUp_(event);
@@ -757,16 +759,15 @@ esError esQueuePut(struct esEventQ * queue, esEvent *  event)
         if (eventQIsFull(queue) == false) {
             eventQPutItemI(queue, event);
 
-            return (ES_ERROR_NONE);
+            error = ES_ERROR_NONE;
         } else {
             esEventDestroyI(event);
-
-            return (ES_ERROR_NO_MEMORY);
+            error = ES_ERROR_NO_MEMORY;
         }
     }
     ES_CRITICAL_LOCK_EXIT(intrCtx);
 
-    return (ES_ERROR_NO_REFERENCE);
+    return (error);
 }
 
 esError esQueueFlush(struct esEventQ * queue)
