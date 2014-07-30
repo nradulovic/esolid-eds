@@ -36,6 +36,7 @@
 #include "base/prio_queue.h"
 #include "vtimer/vtimer.h"
 #include "eds/epa.h"
+#include "eds/queue.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -64,11 +65,6 @@ struct epaKernel {
     struct epaSched     sched;
     void             (* idle)(void);
     enum epaKernelState state;
-};
-
-struct esEventQ {
-    struct esQp         qp;
-    uint32_t            max;
 };
 
 struct epaResource {
@@ -205,8 +201,8 @@ static PORT_C_INLINE void eventQTerm(
 }
 
 static PORT_C_INLINE void eventQPutItemI(
-    struct esEventQ *  eventQ,
-    struct esEvent * event) {
+    struct esEventQ *   eventQ,
+    struct esEvent *    event) {
 
     uint32_t            occupied;
 
@@ -742,6 +738,64 @@ esError esEpaSendAheadEvent(
     ES_CRITICAL_LOCK_EXIT(intrCtx);
 
     return (error);
+}
+
+void esQueueInit(struct esEventQ * queue, void * buff, size_t size)
+{
+    eventQInit(queue, buff, size);
+}
+
+esError esQueuePut(struct esEventQ * queue, esEvent *  event)
+{
+    esIntrCtx           intrCtx;
+
+    ES_CRITICAL_LOCK_ENTER(&intrCtx);
+
+    if (esEventRefGet_(event) < ES_EVENT_REF_LIMIT) {
+        esEventRefUp_(event);
+        
+        if (eventQIsFull(queue) == false) {
+            eventQPutItemI(queue, event);
+
+            return (ES_ERROR_NONE);
+        } else {
+            esEventDestroyI(event);
+
+            return (ES_ERROR_NO_MEMORY);
+        }
+    }
+    ES_CRITICAL_LOCK_EXIT(intrCtx);
+
+    return (ES_ERROR_NO_REFERENCE);
+}
+
+esError esQueueFlush(struct esEventQ * queue)
+{
+    esIntrCtx           intrCtx;
+    esEpa *             epa;
+
+    ES_CRITICAL_LOCK_ENTER(&intrCtx);
+    epa = esEdsGetCurrent();
+
+    while (eventQIsEmpty(queue) == false) {
+        esEvent *       event;
+
+        if (eventQIsFull(&epa->eventQ) == true) {
+
+            return (ES_ERROR_NO_MEMORY);
+        }
+        event = eventQGetItemI(queue);
+        esEventReferenceDown_(event);
+        epaSendEventI(epa, event);
+    }
+    ES_CRITICAL_LOCK_EXIT(intrCtx);
+
+    return (ES_ERROR_NONE);
+}
+
+bool    esQueueIsEmpty(struct esEventQ * queue)
+{
+    return (eventQIsEmpty(queue));
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

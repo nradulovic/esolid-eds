@@ -10,20 +10,27 @@
 
 #include <stdbool.h>
 #include "base/error.h"
+#include "base/queue.h"
 #include "mem/mem_class.h"
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
-struct esEventQ;
+
+struct esEventQ {
+    struct esQp         qp;
+    uint32_t            max;
+};
+
+typedef struct esEventQ esEventQ;
+
 struct esEvent;
 
-esError esQueueCreate(struct esMem *, size_t size, struct esEventQ * queue);
+void    esQueueInit(struct esEventQ * queue, void * buff, size_t size);
 esError esQueuePut(struct esEventQ * queue, esEvent *  event);
-esError esQueueGet(struct esEventQ * queue, esEvent ** event);
+esError esQueueFlush(struct esEventQ * queue);
 bool    esQueueIsEmpty(struct esEventQ * queue);
-esError esQueueDestroy(struct esEventQ * queue);
 
 #ifdef	__cplusplus
 }
