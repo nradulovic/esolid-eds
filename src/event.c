@@ -285,7 +285,7 @@ void esEventLock(
 }
 
 /*----------------------------------------------------------------------------*/
-void esEventUnlock(
+void esEventUnlockI(
     struct esEvent *       event) {
 
     ES_REQUIRE(ES_API_POINTER, event != NULL);
@@ -329,7 +329,7 @@ esError esEventDestroyI(
     esEventReferenceDown_(
         event);
 
-    if (esEventRefGet_(event) == 0u) {
+    if (esEventAttrib_(event) == 0u) {
         eventTerm(
             event);
         error = eventDestroyI(

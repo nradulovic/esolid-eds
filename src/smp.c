@@ -526,6 +526,11 @@ esError esSmDispatch(
 #endif /* !(CONFIG_SMP_HSM == 1) */
 }
 
+void * esSmGetWorkspace(const struct esSm * sm)
+{
+    return (sm->wspace);
+}
+
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
 
 /** @endcond *//** @} *//******************************************************
