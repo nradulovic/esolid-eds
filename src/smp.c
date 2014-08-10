@@ -257,7 +257,7 @@ static uint_fast8_t smFindPath(
 
         stateId = source[srcCount++];
         source[srcCount] = sm->table[stateId].super;
-        dstCount = 0u;
+        dstCount = 1u;
 
         while (0 != destination[dstCount]) {
             dstCount++;
@@ -265,7 +265,7 @@ static uint_fast8_t smFindPath(
             if (source[srcCount] == destination[dstCount]) {
                 source[srcCount] = 0;
 
-                return (dstCount);
+                return (dstCount - 1u);
             }
         }
     }
